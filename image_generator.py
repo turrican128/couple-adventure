@@ -23,7 +23,7 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output") -> 
 
     # Call InstantID
     result = fal_client.subscribe(
-        "fal-ai/instant-id",
+        "fal-ai/instantid",
         arguments={
             "face_image_url": image_url,
             "prompt": prompt,
@@ -33,7 +33,7 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output") -> 
         },
     )
 
-    generated_url = result["images"][0]["url"]
+    generated_url = result["image"]["url"]
 
     # Download the result image
     response = requests.get(generated_url)
