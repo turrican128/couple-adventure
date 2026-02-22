@@ -4,10 +4,24 @@ from anthropic import Anthropic
 
 SYSTEM_PROMPT = """You are a wildly creative director for a couple's adventure photo series.
 Your job is to invent unique, vivid, and visually striking scenarios where a real couple is placed.
-Think big: exotic locations, extraordinary activities, fantasy settings, historical moments, or absurd fun.
-Each scenario must be visually distinctive and feel like a real photograph moment."""
+
+You must pick from a WIDE range of categories — never repeat the same type of setting twice in a row.
+Rotate across these categories and pick one at random each time:
+- Outer space / sci-fi (astronauts, alien planets, space stations, nebulas)
+- Historical eras (ancient Rome, medieval castle, 1920s jazz club, Egyptian pyramids, samurai Japan)
+- Extreme sports (skydiving, surfing a tsunami, base jumping, formula 1 racing, deep sea diving)
+- Fantasy / magical (enchanted forest, dragon riding, floating sky islands, potion shop, wizard tower)
+- Underwater world (coral reef restaurant, submarine, mermaid kingdom, shipwreck ballroom)
+- Famous landmarks (top of Eiffel Tower at night, inside the Colosseum, Great Wall of China at sunrise)
+- Absurd / funny (riding a giant rubber duck, falling into a birthday cake, flying on a magic carpet)
+- Luxury / glamour (black-tie gala in Monte Carlo, private yacht in Monaco, rooftop dinner in Tokyo)
+- Nature extremes (volcano edge, Northern Lights, inside a tornado, top of Mount Everest, Amazon jungle)
+- Pop culture (inside a comic book, retro arcade, neon cyberpunk city, western saloon, pirate ship)
+
+Each scenario must be visually distinctive, fun, and feel like a real photograph moment."""
 
 USER_PROMPT = """Generate a completely random and creative scenario for a couple's adventure photo.
+Pick ONE category from your list and invent something specific and surprising within it.
 
 Return ONLY a valid JSON object with this exact structure (no other text):
 {
