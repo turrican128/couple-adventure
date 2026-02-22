@@ -9,7 +9,7 @@ def test_load_config_returns_both_keys():
         from config import load_config
         cfg = load_config()
         assert cfg["anthropic_api_key"] == "test-ant"
-        assert cfg["fal_key"] == "test-fal"
+        assert "fal_key" not in cfg
 
 
 def test_load_config_raises_if_anthropic_key_missing():

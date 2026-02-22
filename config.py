@@ -15,5 +15,4 @@ def load_config() -> dict:
 
     return {
         "anthropic_api_key": anthropic_key,
-        "fal_key": fal_key,
     }

@@ -27,6 +27,7 @@ def test_generate_image_saves_file(tmp_path):
             output_dir=str(tmp_path / "output"),
         )
 
+    mock_fal.upload_file.assert_called_once_with(str(input_image))
     assert Path(output_path).exists()
     assert Path(output_path).suffix == ".jpg"
     assert Path(output_path).read_bytes() == fake_image_bytes

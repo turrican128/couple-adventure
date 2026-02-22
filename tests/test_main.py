@@ -8,14 +8,15 @@ def test_main_happy_path(tmp_path):
     }
     fake_output_path = str(tmp_path / "2026-01-01_12-00-00.jpg")
 
-    with patch("main.load_config", return_value={"anthropic_api_key": "a", "fal_key": "f"}), \
+    with patch("main.load_config", return_value={"anthropic_api_key": "a"}), \
          patch("main.get_couple_image_path", return_value="images/couple.jpg"), \
-         patch("main.generate_scenario", return_value=fake_scenario), \
+         patch("main.generate_scenario", return_value=fake_scenario) as mock_gen_scenario, \
          patch("main.generate_image", return_value=fake_output_path) as mock_gen_img:
 
         from main import run
         run()
 
+    mock_gen_scenario.assert_called_once_with(api_key="a")
     mock_gen_img.assert_called_once_with(
         image_path="images/couple.jpg",
         prompt=fake_scenario["image_prompt"],

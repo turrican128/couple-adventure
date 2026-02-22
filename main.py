@@ -1,10 +1,11 @@
+import sys
 from pathlib import Path
 
 from config import load_config
 from scenario_generator import generate_scenario
 from image_generator import generate_image
 
-SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+SUPPORTED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
 
 def get_couple_image_path(images_dir: str = "images") -> str:
@@ -28,15 +29,23 @@ def run():
     print(f"Using image: {image_path}")
 
     print("Generating scenario...")
-    scenario_data = generate_scenario(api_key=cfg["anthropic_api_key"])
+    try:
+        scenario_data = generate_scenario(api_key=cfg["anthropic_api_key"])
+    except Exception as e:
+        print(f"Error generating scenario: {e}")
+        sys.exit(1)
 
     print(f"\nScenario: {scenario_data['scenario']}\n")
     print("Generating image (this may take 20-40 seconds)...")
 
-    output_path = generate_image(
-        image_path=image_path,
-        prompt=scenario_data["image_prompt"],
-    )
+    try:
+        output_path = generate_image(
+            image_path=image_path,
+            prompt=scenario_data["image_prompt"],
+        )
+    except Exception as e:
+        print(f"Error generating image: {e}")
+        sys.exit(1)
 
     print(f"\nDone! Image saved to: {output_path}")
 
