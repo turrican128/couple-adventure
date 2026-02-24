@@ -42,6 +42,7 @@ def run():
         output_path = generate_image(
             image_path=image_path,
             prompt=scenario_data["image_prompt"],
+            scenario=scenario_data["scenario"],
         )
     except Exception as e:
         print(f"Error generating image: {e}")

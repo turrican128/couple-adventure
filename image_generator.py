@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -5,9 +6,16 @@ import fal_client
 import requests
 
 
-def generate_image(image_path: str, prompt: str, output_dir: str = "output") -> str:
+def _make_slug(text: str, max_len: int = 50) -> str:
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9\s]", "", text)
+    text = re.sub(r"\s+", "-", text.strip())
+    return text[:max_len].rstrip("-")
+
+
+def generate_image(image_path: str, prompt: str, output_dir: str = "output", scenario: str = "") -> str:
     """
-    Upload couple image to fal.ai, run InstantID with prompt,
+    Upload couple image to fal.ai, run InstantCharacter with prompt,
     download result, and save to output_dir. Returns path to saved file.
     """
     if not Path(image_path).exists():
@@ -41,7 +49,8 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output") -> 
     response.raise_for_status()
 
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_path = str(Path(output_dir) / f"{timestamp}.jpg")
+    slug = f"_{_make_slug(scenario)}" if scenario else ""
+    output_path = str(Path(output_dir) / f"{timestamp}{slug}.jpg")
     Path(output_path).write_bytes(response.content)
 
     return output_path

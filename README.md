@@ -1,6 +1,6 @@
 # Couple Adventure Generator
 
-Generates a new AI image of a real couple placed in a random creative scenario every time you run it. Faces are preserved using [fal.ai InstantID](https://fal.ai/models/fal-ai/instant-id). Scenarios are generated fresh each run by Claude.
+Generates a new AI image of a real couple placed in a random creative scenario every time you run it. Faces are preserved using [fal.ai InstantCharacter](https://fal.ai/models/fal-ai/instant-character). Scenarios are generated fresh each run by Claude.
 
 ## Setup
 
@@ -26,7 +26,21 @@ Generates a new AI image of a real couple placed in a random creative scenario e
 python main.py
 ```
 
-Each run generates a new image saved to `output/` with a timestamp filename. The scenario description is printed to the console.
+Each run generates a new image saved to `output/` with a timestamp + scenario slug filename (e.g. `2026-02-24_21-03-33_couple-strides-across-volcano.jpg`). The scenario description is printed to the console.
+
+## Gallery
+
+To browse all generated images in a visual grid:
+
+```bash
+python gallery.py
+```
+
+This generates a `gallery.html` and opens it in your browser automatically.
+
+## Security note
+
+Your `.env` file (containing API keys) is listed in `.gitignore` and will never be committed. Never share or commit this file.
 
 ## Example output
 
