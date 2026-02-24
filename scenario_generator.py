@@ -3,6 +3,21 @@ import random
 import re
 from anthropic import Anthropic
 
+POSES = [
+    "kissing passionately",
+    "running and laughing together",
+    "one lifting the other in the air",
+    "hugging tightly from behind",
+    "holding hands and looking at each other",
+    "mid-jump with arms spread wide",
+    "one dipping the other in a dance move",
+    "sitting close together, leaning in",
+    "back to back, arms crossed, looking away dramatically",
+    "walking together, caught mid-stride",
+    "one pointing into the distance while the other looks",
+    "both looking up in awe at something above them",
+]
+
 CATEGORIES = [
     "Outer space / sci-fi — astronauts on Mars, alien planet surface, inside a space station, floating in a nebula",
     "Historical eras — ancient Rome colosseum, medieval jousting tournament, 1920s speakeasy jazz club, Egyptian pyramid construction, samurai Japan cherry blossom",
@@ -23,25 +38,27 @@ The scenario must feel like a real photograph moment — cinematic, detailed, an
 USER_PROMPT_TEMPLATE = """Generate a creative scenario for a couple's adventure photo in this exact category:
 
 CATEGORY: {category}
+POSE: The couple must be {pose} — incorporate this naturally into the scene.
 
 Invent something specific and visually striking within this category. Do not stray into other categories.
 
 Return ONLY a valid JSON object with this exact structure (no other text):
 {{
   "scenario": "A short 1-2 sentence description of the scenario for display",
-  "image_prompt": "A detailed photorealistic image generation prompt. Start with 'A couple' and describe what they are doing, the setting, lighting, atmosphere, camera angle, and visual style. Be specific and vivid. Aim for 3-5 sentences."
+  "image_prompt": "A detailed photorealistic image generation prompt. Start with 'A couple' followed by the pose ({pose}), then describe the setting, lighting, atmosphere, and visual style. IMPORTANT: the couple must be facing the camera with their faces clearly visible. Be specific and vivid. Aim for 3-5 sentences."
 }}"""
 
 
 def generate_scenario(api_key: str) -> dict:
     category = random.choice(CATEGORIES)
+    pose = random.choice(POSES)
     client = Anthropic(api_key=api_key)
 
     message = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=512,
         system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": USER_PROMPT_TEMPLATE.format(category=category)}],
+        messages=[{"role": "user", "content": USER_PROMPT_TEMPLATE.format(category=category, pose=pose)}],
     )
 
     raw = message.content[0].text.strip()

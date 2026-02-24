@@ -21,19 +21,20 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output") -> 
     # Upload reference image to fal.ai temporary storage
     image_url = fal_client.upload_file(image_path)
 
-    # Call InstantID
+    # Call InstantCharacter — preserves identity without locking in the reference pose
     result = fal_client.subscribe(
-        "fal-ai/instantid",
+        "fal-ai/instant-character",
         arguments={
-            "face_image_url": image_url,
+            "image_url": image_url,
             "prompt": prompt,
-            "negative_prompt": "blurry, low quality, distorted face, deformed, ugly, bad anatomy",
-            "guidance_scale": 5.0,
-            "num_inference_steps": 30,
+            "negative_prompt": "blurry, low quality, distorted face, deformed, ugly, bad anatomy, heart hands, silhouette, backs turned, facing away, from behind, faceless",
+            "scale": 1.2,
+            "guidance_scale": 3.5,
+            "num_inference_steps": 28,
         },
     )
 
-    generated_url = result["image"]["url"]
+    generated_url = result["images"][0]["url"]
 
     # Download the result image
     response = requests.get(generated_url)
