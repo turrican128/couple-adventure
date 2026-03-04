@@ -37,39 +37,47 @@ def get_couple_image_path(images_dir: str = "images") -> str:
     )
 
 
-def run():
+def run(count: int = 1):
     print("Couple Adventure Generator")
     print("-" * 40)
 
     cfg = load_config()
-
     image_path = get_couple_image_path()
     print(f"Using image: {image_path}")
 
-    print("Generating scenario...")
-    try:
-        scenario_data = generate_scenario(api_key=cfg["anthropic_api_key"])
-    except Exception as e:
-        print(f"Error generating scenario: {e}")
-        sys.exit(1)
+    for i in range(count):
+        if count > 1:
+            print(f"\n[{i + 1}/{count}] Generating scenario...")
+        else:
+            print("Generating scenario...")
 
-    print(f"\nScenario: {scenario_data['scenario']}\n")
-    print("Generating image (this may take 20-40 seconds)...")
+        try:
+            scenario_data = generate_scenario(api_key=cfg["anthropic_api_key"])
+        except Exception as e:
+            print(f"Error generating scenario: {e}")
+            sys.exit(1)
 
-    try:
-        output_path = generate_image(
-            image_path=image_path,
-            prompt=scenario_data["image_prompt"],
-            scenario=scenario_data["scenario"],
-        )
-    except Exception as e:
-        print(f"Error generating image: {e}")
-        sys.exit(1)
+        print(f"Scenario: {scenario_data['scenario']}\n")
+        print("Generating image (this may take 20-40 seconds)...")
 
-    append_log(scenario_data, output_path, image_path)
-    print(f"\nDone! Image saved to: {output_path}")
-    print(f"Log updated  : {LOG_FILE}")
+        try:
+            output_path = generate_image(
+                image_path=image_path,
+                prompt=scenario_data["image_prompt"],
+                scenario=scenario_data["scenario"],
+            )
+        except Exception as e:
+            print(f"Error generating image: {e}")
+            sys.exit(1)
+
+        append_log(scenario_data, output_path, image_path)
+        print(f"Done! Image saved to: {output_path}")
+        print(f"Log updated  : {LOG_FILE}")
 
 
 if __name__ == "__main__":
-    run()
+    import argparse
+    parser = argparse.ArgumentParser(description="Couple Adventure Generator")
+    parser.add_argument("--count", type=int, default=1, help="Number of images to generate")
+    args = parser.parse_args()
+    run(count=args.count)
