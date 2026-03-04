@@ -8,6 +8,41 @@ from pathlib import Path
 
 OUTPUT_DIR = Path("output")
 GALLERY_FILE = Path("gallery.html")
+LOG_PATH = OUTPUT_DIR / "generation_log.txt"
+
+
+def parse_log(log_path: Path) -> dict:
+    """Returns a dict of {image_stem: scenario_text} from the generation log."""
+    if not log_path.exists():
+        return {}
+
+    entries = {}
+    current_image = None
+    reading_scenario = False
+    scenario_lines = []
+
+    for line in log_path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("=" * 10):
+            if current_image and scenario_lines:
+                entries[current_image] = " ".join(scenario_lines).strip()
+            current_image = None
+            reading_scenario = False
+            scenario_lines = []
+        elif line.startswith("Output Image :"):
+            stem = Path(line.split(":", 1)[1].strip()).stem
+            current_image = stem
+            reading_scenario = False
+        elif line.strip() == "Scenario:":
+            reading_scenario = True
+        elif line.strip() == "Image Prompt:":
+            reading_scenario = False
+        elif reading_scenario and line.strip():
+            scenario_lines.append(line.strip())
+
+    if current_image and scenario_lines:
+        entries[current_image] = " ".join(scenario_lines).strip()
+
+    return entries
 
 
 def generate_gallery():
@@ -21,8 +56,15 @@ def generate_gallery():
         print("No images found in output/ folder. Run main.py first!")
         return
 
+    scenarios = parse_log(LOG_PATH)
+
     cards = "\n".join(
-        f'<div class="card"><img src="{html.escape(str(img))}" loading="lazy"><p>{html.escape(img.stem)}</p></div>'
+        f'<div class="card">'
+        f'<img src="{html.escape(str(img))}" loading="lazy">'
+        f'<div class="info">'
+        f'<p class="stem">{html.escape(img.stem)}</p>'
+        + (f'<p class="scenario">{html.escape(scenarios[img.stem])}</p>' if img.stem in scenarios else "")
+        + "</div></div>"
         for img in images
     )
 
@@ -40,7 +82,9 @@ def generate_gallery():
     .card {{ background: #1a1a1a; border-radius: 12px; overflow: hidden; transition: transform 0.2s; }}
     .card:hover {{ transform: scale(1.02); }}
     .card img {{ width: 100%; display: block; aspect-ratio: 1; object-fit: cover; }}
-    .card p {{ padding: 10px 12px; font-size: 11px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .info {{ padding: 10px 12px; }}
+    .stem {{ font-size: 11px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }}
+    .scenario {{ font-size: 12px; color: #ccc; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
   </style>
 </head>
 <body>
