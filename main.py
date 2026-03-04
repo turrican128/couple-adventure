@@ -1,9 +1,27 @@
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from config import load_config
 from scenario_generator import generate_scenario
 from image_generator import generate_image
+
+LOG_FILE = Path("output/generation_log.txt")
+
+
+def append_log(scenario_data: dict, image_path: str, source_image: str):
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entry = (
+        f"{'=' * 60}\n"
+        f"Date & Time  : {timestamp}\n"
+        f"Output Image : {image_path}\n"
+        f"Source Photo : {source_image}\n"
+        f"\nScenario:\n{scenario_data['scenario']}\n"
+        f"\nImage Prompt:\n{scenario_data['image_prompt']}\n"
+    )
+    with LOG_FILE.open("a", encoding="utf-8") as f:
+        f.write(entry + "\n")
 
 SUPPORTED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
@@ -48,7 +66,9 @@ def run():
         print(f"Error generating image: {e}")
         sys.exit(1)
 
+    append_log(scenario_data, output_path, image_path)
     print(f"\nDone! Image saved to: {output_path}")
+    print(f"Log updated  : {LOG_FILE}")
 
 
 if __name__ == "__main__":

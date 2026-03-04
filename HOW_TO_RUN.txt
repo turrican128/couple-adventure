@@ -1,0 +1,37 @@
+====================================
+  COUPLE ADVENTURE - HOW TO RUN
+====================================
+
+FIRST TIME SETUP (do this once)
+---------------------------------
+1. Open CMD and go to the project folder:
+   cd C:\ClaudeSandbox\couple-adventure
+
+2. Install dependencies:
+   pip install -r requirements.txt
+
+3. Create a file named ".env" in the project folder with your API keys:
+   ANTHROPIC_API_KEY=your_anthropic_key_here
+   FAL_KEY=your_fal_key_here
+
+4. Drop your couple photo into the "images" folder.
+   Supported formats: JPG, JPEG, PNG, WEBP
+
+
+GENERATE AN IMAGE
+---------------------------------
+   cd C:\ClaudeSandbox\couple-adventure
+   python main.py
+
+   It will pick a random adventure scenario and generate the image.
+   Result saved in the "output" folder.
+
+
+VIEW THE GALLERY (all generated images)
+---------------------------------
+   python gallery.py
+
+   Opens a gallery in your browser showing all generated images.
+
+
+====================================

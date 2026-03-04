@@ -2,6 +2,7 @@
 Opens a local HTML gallery of all generated couple adventure images.
 Run: python gallery.py
 """
+import html
 import webbrowser
 from pathlib import Path
 
@@ -21,11 +22,11 @@ def generate_gallery():
         return
 
     cards = "\n".join(
-        f'<div class="card"><img src="{img}" loading="lazy"><p>{img.stem}</p></div>'
+        f'<div class="card"><img src="{html.escape(str(img))}" loading="lazy"><p>{html.escape(img.stem)}</p></div>'
         for img in images
     )
 
-    html = f"""<!DOCTYPE html>
+    page = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -51,7 +52,7 @@ def generate_gallery():
 </body>
 </html>"""
 
-    GALLERY_FILE.write_text(html, encoding="utf-8")
+    GALLERY_FILE.write_text(page, encoding="utf-8")
     url = GALLERY_FILE.resolve().as_uri()
     webbrowser.open(url)
     print(f"Gallery opened ({len(images)} images): {GALLERY_FILE.resolve()}")
