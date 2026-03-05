@@ -35,7 +35,7 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output", sce
         arguments={
             "image_url": image_url,
             "prompt": prompt,
-            "guidance_scale": 3.5,
+            "guidance_scale": 5.0,
             "num_inference_steps": 28,
             "output_format": "jpeg",
         },

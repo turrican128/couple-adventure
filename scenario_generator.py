@@ -22,9 +22,8 @@ CATEGORIES = [
     "Outer space / sci-fi — astronauts on Mars, alien planet surface, inside a space station, floating in a nebula",
     "Historical eras — ancient Rome colosseum, medieval jousting tournament, 1920s speakeasy jazz club, Egyptian pyramid construction, samurai Japan cherry blossom",
     "Extreme sports — tandem skydiving over Grand Canyon, surfing a massive wave in Hawaii, bungee jumping off a cliff, Formula 1 pit lane, white-water rafting",
-    "Fantasy / magical — riding a dragon over a volcano, floating sky islands at sunset, inside a wizard's tower, enchanted forest with fairies, giant mushroom kingdom",
+    "Fantasy / magical — riding a dragon over a volcano, floating sky islands at sunset, inside a wizard's tower, enchanted forest at dusk, ancient ruins with magical light",
     "Famous landmarks — top of Eiffel Tower at night with fireworks, inside the Roman Colosseum, Great Wall of China at sunrise, Machu Picchu in the clouds, Taj Mahal at golden hour",
-    "Absurd / funny — riding a giant rubber duck in a bathtub city, falling into a massive birthday cake, flying on a magic carpet over a busy city, inside a giant snow globe, shrunk to the size of ants in a garden",
     "Luxury / glamour — black-tie gala on a Monaco superyacht, rooftop dinner above the Tokyo skyline, private jet over the Alps, Venice gondola under fireworks, champagne tower at a Parisian penthouse",
     "Nature extremes — standing on the edge of an erupting volcano, watching the Northern Lights in Lapland, inside the eye of a tornado, summit of Mount Everest at sunrise, deep in the Amazon rainforest",
     "Pop culture / retro — inside a giant comic book panel, neon-lit cyberpunk Tokyo street, Wild West saloon showdown, aboard a pirate ship in a storm, 1980s neon roller disco",
@@ -33,7 +32,8 @@ CATEGORIES = [
 
 SYSTEM_PROMPT = """You are a wildly creative director for a couple's adventure photo series.
 Your job is to invent a specific, vivid, and visually striking scenario within the given category.
-The scenario must feel like a real photograph moment — cinematic, detailed, and surprising."""
+The scenario must feel like a real photograph moment — cinematic, detailed, and surprising.
+IMPORTANT: The scene must look photorealistic. No cartoon worlds, no alien environments with impossible colors, no settings that could not plausibly be photographed. Even fantasy scenes (dragons, magic) must feel grounded and cinematic like a movie still."""
 
 USER_PROMPT_TEMPLATE = """Generate a creative scenario for a couple's adventure photo in this exact category:
 
@@ -45,7 +45,7 @@ Invent something specific and visually striking within this category. Do not str
 Return ONLY a valid JSON object with this exact structure (no other text):
 {{
   "scenario": "A short 1-2 sentence description of the scenario for display",
-  "image_prompt": "An image EDITING instruction for FLUX Kontext. The instruction transforms the couple's existing photo into a new adventure scene. Start with 'Transform this photo:' then describe the new setting, pose ({pose}), lighting, atmosphere and visual style in vivid detail. End with 'Keep the two people\\'s faces, hair and appearance exactly as they are in the original photo.' Be specific and cinematic. Aim for 3-5 sentences."
+  "image_prompt": "An image EDITING instruction for FLUX Kontext. The instruction transforms the couple's existing photo into a new adventure scene. Start with 'Transform this photo:' then describe ONLY the new background, environment, lighting, and atmosphere in vivid cinematic detail. Describe the couple\\'s pose ({pose}) naturally within the scene. STRICT RULES: never change their clothing or add costumes; never put helmets, hats, masks, goggles or anything on their heads or faces; only the world around them changes, they stay exactly as they look. End with: 'The two people must remain completely unchanged — same faces, hair, skin, and clothing as in the original photo.' Aim for 3-5 sentences."
 }}"""
 
 
