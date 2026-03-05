@@ -14,12 +14,6 @@ FIRST TIME SETUP (do this once)
    ANTHROPIC_API_KEY=your_anthropic_key_here
    FAL_KEY=your_fal_key_here
 
-   Also set the genders of the two people in your couple photo.
-   Look at your photo — who is on the LEFT and who is on the RIGHT?
-   PERSON_1_GENDER=female     <-- left person in your photo
-   PERSON_2_GENDER=male       <-- right person in your photo
-   (Options: female, male, non-binary)
-
 4. Drop your couple photo into the "images" folder.
    Supported formats: JPG, JPEG, PNG, WEBP
 
@@ -29,8 +23,12 @@ GENERATE AN IMAGE
    cd C:\ClaudeSandbox\couple-adventure
    python main.py
 
-   It will pick a random adventure scenario and generate the image.
-   Result saved in the "output" folder.
+   Generates 1 image with a random adventure scene.
+   Your couple photo is used as the base — both faces are preserved.
+   Result saved in the "output" folder (image + a .txt log file).
+
+   To generate multiple images in one run:
+   python main.py --count 3
 
 
 VIEW THE GALLERY (all generated images)
