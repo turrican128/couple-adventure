@@ -36,7 +36,7 @@ def generate_image(image_path: str, prompt: str, output_dir: str = "output", sce
             "image_url": image_url,
             "prompt": prompt,
             "negative_prompt": "blurry, low quality, distorted face, deformed, ugly, bad anatomy, heart hands, silhouette, backs turned, facing away, from behind, faceless",
-            "scale": 1.2,
+            "scale": 1.5,
             "guidance_scale": 3.5,
             "num_inference_steps": 28,
         },

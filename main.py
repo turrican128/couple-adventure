@@ -6,22 +6,17 @@ from config import load_config
 from scenario_generator import generate_scenario
 from image_generator import generate_image
 
-LOG_FILE = Path("output/generation_log.txt")
-
-
-def append_log(scenario_data: dict, image_path: str, source_image: str):
-    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+def write_log(scenario_data: dict, image_path: str, source_image: str):
+    log_path = Path(image_path).with_suffix(".txt")
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = (
-        f"{'=' * 60}\n"
         f"Date & Time  : {timestamp}\n"
         f"Output Image : {image_path}\n"
         f"Source Photo : {source_image}\n"
         f"\nScenario:\n{scenario_data['scenario']}\n"
         f"\nImage Prompt:\n{scenario_data['image_prompt']}\n"
     )
-    with LOG_FILE.open("a", encoding="utf-8") as f:
-        f.write(entry + "\n")
+    log_path.write_text(entry, encoding="utf-8")
 
 SUPPORTED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"]
 
@@ -70,9 +65,10 @@ def run(count: int = 1):
             print(f"Error generating image: {e}")
             sys.exit(1)
 
-        append_log(scenario_data, output_path, image_path)
+        write_log(scenario_data, output_path, image_path)
+        log_path = Path(output_path).with_suffix(".txt")
         print(f"Done! Image saved to: {output_path}")
-        print(f"Log updated  : {LOG_FILE}")
+        print(f"Log saved    : {log_path}")
 
 
 if __name__ == "__main__":
