@@ -45,7 +45,7 @@ Invent something specific and visually striking within this category. Do not str
 Return ONLY a valid JSON object with this exact structure (no other text):
 {{
   "scenario": "A short 1-2 sentence description of the scenario for display",
-  "image_prompt": "A detailed photorealistic image generation prompt. Start with 'A couple' followed by the pose ({pose}), then describe the setting, lighting, atmosphere, and visual style. IMPORTANT: the couple must be facing the camera with their faces clearly visible. Be specific and vivid. Aim for 3-5 sentences."
+  "image_prompt": "An image EDITING instruction for FLUX Kontext. The instruction transforms the couple's existing photo into a new adventure scene. Start with 'Transform this photo:' then describe the new setting, pose ({pose}), lighting, atmosphere and visual style in vivid detail. End with 'Keep the two people\\'s faces, hair and appearance exactly as they are in the original photo.' Be specific and cinematic. Aim for 3-5 sentences."
 }}"""
 
 
