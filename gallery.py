@@ -8,44 +8,24 @@ from pathlib import Path
 
 OUTPUT_DIR = Path("output")
 GALLERY_FILE = Path("gallery.html")
-LOG_PATH = OUTPUT_DIR / "generation_log.txt"
 
 
-def parse_log(log_path: Path) -> dict:
-    """Returns a dict of {image_stem: scenario_text} from the generation log."""
+def read_scenario(log_path: Path) -> str:
+    """Returns the scenario text from a per-image .txt log file, or empty string."""
     if not log_path.exists():
-        return {}
+        return ""
 
-    entries = {}
-    current_image = None
-    reading_scenario = False
+    lines = log_path.read_text(encoding="utf-8").splitlines()
     scenario_lines = []
-
-    for line in log_path.read_text(encoding="utf-8").splitlines():
-        if line.startswith("=" * 10):
-            if current_image and scenario_lines:
-                entries[current_image] = " ".join(scenario_lines).strip()
-            current_image = None
-            reading_scenario = False
-            scenario_lines = []
-        elif line.startswith("Output Image :"):
-            stem = Path(line.split(":", 1)[1].strip()).stem
-            current_image = stem
-            reading_scenario = False
-        elif line.strip() == "Scenario:":
-            reading_scenario = True
+    reading = False
+    for line in lines:
+        if line.strip() == "Scenario:":
+            reading = True
         elif line.strip() == "Image Prompt:":
-            if current_image and scenario_lines:
-                entries[current_image] = " ".join(scenario_lines).strip()
-            reading_scenario = False
-            scenario_lines = []
-        elif reading_scenario and line.strip():
+            break
+        elif reading and line.strip():
             scenario_lines.append(line.strip())
-
-    if current_image and scenario_lines:
-        entries[current_image] = " ".join(scenario_lines).strip()
-
-    return entries
+    return " ".join(scenario_lines).strip()
 
 
 def generate_gallery():
@@ -59,14 +39,12 @@ def generate_gallery():
         print("No images found in output/ folder. Run main.py first!")
         return
 
-    scenarios = parse_log(LOG_PATH)
-
     cards = "\n".join(
         f'<div class="card">'
-        f'<img src="{html.escape(str(img))}" loading="lazy">'
+        f'<img src="{html.escape(img.as_posix())}" loading="lazy">'
         f'<div class="info">'
         f'<p class="stem">{html.escape(img.stem)}</p>'
-        + (f'<p class="scenario">{html.escape(scenarios[img.stem])}</p>' if img.stem in scenarios else "")
+        + (f'<p class="scenario">{html.escape(scenario)}</p>' if (scenario := read_scenario(img.with_suffix(".txt"))) else "")
         + "</div></div>"
         for img in images
     )
