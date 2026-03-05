@@ -35,7 +35,10 @@ def parse_log(log_path: Path) -> dict:
         elif line.strip() == "Scenario:":
             reading_scenario = True
         elif line.strip() == "Image Prompt:":
+            if current_image and scenario_lines:
+                entries[current_image] = " ".join(scenario_lines).strip()
             reading_scenario = False
+            scenario_lines = []
         elif reading_scenario and line.strip():
             scenario_lines.append(line.strip())
 
